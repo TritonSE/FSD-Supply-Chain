@@ -4,6 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var cors = require("cors");
+var mongoose = require('mongoose');
 
 var indexRouter = require('./routes/index');
 
@@ -15,6 +16,12 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cors());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+require('dotenv').config();
+
+mongoose.connect(process.env.DB, {useNewUrlParser: true})
+  .then(() => console.log(`Database connected successfully`))
+  .catch(err => console.log(err));
 
 app.use('/', indexRouter);
 
