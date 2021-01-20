@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 var BatchSchema = new Schema({
-    date: { type: Date, unique: true },
+    date: Date,
     pounds: Number,
     fulfilled: Boolean,
 })
