@@ -5,7 +5,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var cors = require("cors");
 var mongoose = require('mongoose');
-var {Item, Batch} = require('./models/item');
+var Item = require('./models/item');
 
 var indexRouter = require('./routes/index');
 
