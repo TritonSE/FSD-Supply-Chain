@@ -5,15 +5,13 @@ const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const cors = require("cors");
 const mongoose = require("mongoose");
-const Item = require("./models/item");
-const bodyParser = require("body-parser");
+const { Item } = require("./models/item");
 
 const indexRouter = require("./routes/index");
 const itemRouter = require("./routes/items");
 
 const app = express();
 
-app.use(bodyParser);
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -44,7 +42,7 @@ app.use(function (err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render("error");
+  res.send("error");
 });
 
 module.exports = app;
