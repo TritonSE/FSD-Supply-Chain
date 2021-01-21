@@ -42,7 +42,7 @@ router.post("/addItem", (req, res, next) => {
       console.error(err);
     }
 
-    if (item == null) {
+    if (item === null) {
       // item does not exist, so create one and add the batch
       let newItem = new Item({
         name: itemName,
