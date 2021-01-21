@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 router.get("/", function (req, res, next) {
-  res.send("Sup.ply Chain");
+  res.send("Supply Chain");
 });
 
 module.exports = router;
