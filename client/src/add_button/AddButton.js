@@ -3,8 +3,11 @@ import React, {useState} from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form'
 import DatePicker from 'react-datepicker'
-import "react-datepicker/dist/react-datepicker.css";
 import NumericInput from 'react-numeric-input';
+import {postNewItem} from '../MongodbFunctions';
+
+import './AddButton.scss'
+import "react-datepicker/dist/react-datepicker.css";
 
 function AddButton() {
     const [formRendered, toggleFormRendered] = useState(false);
@@ -15,42 +18,92 @@ function AddButton() {
             {formRendered && <AddItemForm closeForm={() => toggleFormRendered(false)}></AddItemForm>}
         </div>
     )
-
 }
 
 function AddItemForm(props) {
-    const [selectedDate, setSelectedDate] = useState(new Date());
-    const[rec, setRec] = useState([]);
+    // Input fields
+    const [itemName, setItemName] = useState('');
+    const [itemId, setItemId] = useState('');
+    const [lbPerHouse, setLbPerHouse] = useState(0);
+    const [weight, setWeight] = useState(0);
+    const [outByDate, setoutByDate] = useState(new Date());
 
-
+    const [showWeightWarning, setWeightWarning] = useState(false);
+    // Logic for adding recommendations will need to be added 
+    const [rec, setRec] = useState([]);
     
     return (
-        <Form>
-            
-            <Form.Label>Item Name</Form.Label>
-            <Form.Control type = "text" placeholder = "Eg. Apples" />
+        <div className="add_item_form_container">
+            <Form className="add_item_form">
+                <Form.Group className="input_field_container">
+                    <Form.Group>
+                        <Form.Label>Item Name</Form.Label>
+                        <Form.Control type="text" placeholder="Eg. Apples" onChange={event => setItemName(event.target.value.trim().toLowerCase())}/>
+                    </Form.Group>
 
-            <b>OR</b>
-            <Form.Label>Item Number</Form.Label>
-            <Form.Control type = "text" placeholder = "Eg. 1234" />
-            <Form.Label>Weight(lbs)</Form.Label>
-            <Form.Control type = "text" placeholder = "Eg. 50" />
-            
-            <DatePicker selected={selectedDate} onChange={date => setSelectedDate(date)}/> 
-            <NumericInput min = {0}
-            size={4}
-            
-            />
-            lbs per Household
-            <Button variant='light' onClick={() => props.closeForm()}>Cancel</Button>
-            {//Leaving recomendations }
-            {(rec.length == 0)?
-            <h1>No Issue</h1>:
-            rec.map(txt=>{return <h1>{txt}</h1>})
-            }
-            
-            
-        </Form>
+                    <b>OR</b>
+
+                    <Form.Group>
+                        <Form.Label>Item Number</Form.Label>
+                        <Form.Control type="text" placeholder="Eg. 1234" onChange={event => {setItemId(event.target.value.trim().toLowerCase())}}/>
+                    </Form.Group>
+
+                    <Form.Group>
+                        <Form.Label>Weight(lbs)</Form.Label>
+                        <Form.Control type="text" placeholder="Eg. 50" 
+                            onChange={event => {
+                                let val = Number(event.target.value.trim());
+
+                                // Checks for valid integer
+                                if (val !== Infinity && String(val) == val) {
+                                    setWeight(val);
+                                    setWeightWarning(false);
+                                }
+                                else {
+                                    setWeightWarning(true);
+                                }
+                            }
+                        }/>
+                        {showWeightWarning && <Form.Text className="warning">Invalid weight value</Form.Text>}
+                    </Form.Group>
+                    
+                    <Form.Group>
+                        <Form.Label>Out by date</Form.Label>
+                        <DatePicker selected={outByDate} onChange={date => setoutByDate(date)}/> 
+                    </Form.Group>
+
+                    <Form.Group>
+                        <NumericInput min = {0} size={1} value={lbPerHouse} onChange={val => setLbPerHouse(val)}/>
+                        lbs per Household
+                        <p id="household_calculator">= { (weight >= 0 && lbPerHouse > 0) ? weight / lbPerHouse : 0 } households </p>
+                    </Form.Group>
+
+                    <Form.Group>
+                        <div >
+                            Recommendations
+                            {(rec.length === 0)  ?
+                                <p className ="recommendation_pos">No Issues</p> :
+                                rec.map(txt=>{return <p className="recommendations_neg">{txt}</p>})
+                            }
+                        </div>
+                    </Form.Group>
+                </Form.Group>
+
+                <Button variant='light' onClick={() => props.closeForm()}>Cancel</Button>
+                <Button variant='primary' onClick={() => {
+                    // Perform checks for valid inputs
+                    if (true) {
+                        postNewItem(itemName, itemId, weight, outByDate);
+                        props.closeForm();
+                    }
+                    // Handle improper inputs
+                    else {
+                        
+                    }
+                    
+                }}>Submit</Button>
+            </Form>
+        </div>
     )
 }
 
