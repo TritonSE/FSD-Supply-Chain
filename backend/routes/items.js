@@ -42,7 +42,7 @@ router.post("/addItem", async (req, res, next) => {
       outDate: Assertions.assertDateString,
     });
   } catch (e) {
-    res.send("body" + e.message, 400);
+    res.status(400).send("body" + e.message);
     return;
   }
 
@@ -50,11 +50,12 @@ router.post("/addItem", async (req, res, next) => {
 
   const outDate = toUTCMidnight(new Date(req.body.outDate));
 
-  // Use today's date as the in date, unless the out date is in the past.
-  // This ensures that the out date >= the in date.
+  // Use today's date as the in date.
   let inDate = toUTCMidnight();
-  if (inDate >= outDate) {
-    inDate = outDate;
+
+  if (outDate < inDate) {
+    res.status(400).send(`outDate "${req.body.outDate}" is in the past`);
+    return;
   }
 
   // Ensure that the requested item exists.
