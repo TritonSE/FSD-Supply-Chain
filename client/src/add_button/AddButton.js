@@ -32,6 +32,7 @@ function AddItemForm(props) {
     // Logic for adding recommendations will need to be added 
     const [rec, setRec] = useState([]);
     
+    
     return (
         <div className="add_item_form_container">
             <Form className="add_item_form">
@@ -74,7 +75,8 @@ function AddItemForm(props) {
 
                     <Form.Group>
                         <NumericInput min={0} size={1} value={lbPerHouse} onChange={val => setLbPerHouse(val)}/>
-                        lbs per Household
+                        
+                        &nbsp; &nbsp;&nbsp;&nbsp; lbs per Household
                         <p id="household_calculator">= { (weight >= 0 && lbPerHouse > 0) ? weight / lbPerHouse : 0 } households </p>
                     </Form.Group>
 
