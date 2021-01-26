@@ -26,7 +26,7 @@ function AddItemForm(props) {
     const [itemId, setItemId] = useState('');
     const [lbPerHouse, setLbPerHouse] = useState(0);
     const [weight, setWeight] = useState(0);
-    const [outByDate, setoutByDate] = useState(new Date());
+    const [outByDate, setOutByDate] = useState(new Date());
 
     const [showWeightWarning, setWeightWarning] = useState(false);
     // Logic for adding recommendations will need to be added 
@@ -38,19 +38,19 @@ function AddItemForm(props) {
                 <Form.Group className="input_field_container">
                     <Form.Group>
                         <Form.Label>Item Name</Form.Label>
-                        <Form.Control type="text" placeholder="Eg. Apples" onChange={event => setItemName(event.target.value.trim().toLowerCase())}/>
+                        <Form.Control type="text" placeholder="e.g. Apples" onChange={event => setItemName(event.target.value.trim().toLowerCase())}/>
                     </Form.Group>
 
                     <b>OR</b>
 
                     <Form.Group>
                         <Form.Label>Item Number</Form.Label>
-                        <Form.Control type="text" placeholder="Eg. 1234" onChange={event => {setItemId(event.target.value.trim().toLowerCase())}}/>
+                        <Form.Control type="text" placeholder="e.g. 1234" onChange={event => {setItemId(event.target.value.trim().toLowerCase())}}/>
                     </Form.Group>
 
                     <Form.Group>
                         <Form.Label>Weight(lbs)</Form.Label>
-                        <Form.Control type="text" placeholder="Eg. 50" 
+                        <Form.Control type="text" placeholder="e.g. 50" 
                             onChange={event => {
                                 let val = Number(event.target.value.trim());
 
@@ -69,7 +69,7 @@ function AddItemForm(props) {
                     
                     <Form.Group>
                         <Form.Label>Out by date</Form.Label>
-                        <DatePicker selected={outByDate} onChange={date => setoutByDate(date)}/> 
+                        <DatePicker selected={outByDate} onChange={date => setOutByDate(date)}/> 
                     </Form.Group>
 
                     <Form.Group>
@@ -81,9 +81,9 @@ function AddItemForm(props) {
                     <Form.Group>
                         <div >
                             Recommendations
-                            {(rec.length === 0)  ?
-                                <p className ="recommendation_pos">No Issues</p> :
-                                rec.map(txt=>{return <p className="recommendations_neg">{txt}</p>})
+                            {(rec.length === 0)
+                                ? <p className ="recommendation_pos">No Issues</p>
+                                : rec.map(txt=> <p className="recommendations_neg">{txt}</p> )
                             }
                         </div>
                     </Form.Group>
