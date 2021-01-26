@@ -73,7 +73,7 @@ function AddItemForm(props) {
                     </Form.Group>
 
                     <Form.Group>
-                        <NumericInput min = {0} size={1} value={lbPerHouse} onChange={val => setLbPerHouse(val)}/>
+                        <NumericInput min={0} size={1} value={lbPerHouse} onChange={val => setLbPerHouse(val)}/>
                         lbs per Household
                         <p id="household_calculator">= { (weight >= 0 && lbPerHouse > 0) ? weight / lbPerHouse : 0 } households </p>
                     </Form.Group>
