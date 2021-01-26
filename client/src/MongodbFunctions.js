@@ -1,16 +1,16 @@
 export const postNewItem = (itemName, itemId, weight, outByDate) => {
-    console.log("Need to implement post to MongoDB");
-    console.log("itemName: ", itemName);
-    console.log("itemId: ", itemId);
-    console.log("weight: ", weight);
-    console.log("outByDate: ", outByDate);
-    // fetch('url', {
-    //     method: 'POST',
-    //     body: JSON.stringify({
-    //         itemName: itemName,
-    //         itemId: itemId,
-    //         weight: weight,
-    //         outByDate: outByDate
-    //     })
-    // }) 
+    fetch('http://localhost:9000/items/addItem', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({
+            itemName: itemName,
+            itemId: itemId,
+            weight: weight,
+            outByDate: outByDate
+        })
+    }).then(res => {
+        if (res.status != 202) {
+            console.error(res);
+        }
+    });
 }

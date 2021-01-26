@@ -91,16 +91,8 @@ function AddItemForm(props) {
 
                 <Button variant='light' onClick={() => props.closeForm()}>Cancel</Button>
                 <Button variant='primary' onClick={() => {
-                    // Perform checks for valid inputs
-                    if (true) {
-                        postNewItem(itemName, itemId, weight, outByDate);
-                        props.closeForm();
-                    }
-                    // Handle improper inputs
-                    else {
-                        
-                    }
-                    
+                    postNewItem(itemName, itemId, weight, outByDate);
+                    props.closeForm();   
                 }}>Submit</Button>
             </Form>
         </div>
