@@ -1,73 +1,91 @@
 const express = require("express");
-const { Item, Batch } = require("../models/item");
 const router = express.Router();
-const { toUTCMidnight } = require("../helpers/dateHelpers");
 
-router.get("/getAllItems", (req, res, next) => {
-  Item.find({}, (err, items) => {
-    if (err) {
-      console.error(err);
+const { Item } = require("../models/item");
+const { Batch } = require("../models/batch");
+const { toUTCMidnight } = require("../helpers/dateHelpers");
+const Assertions = require("../helpers/assertions");
+
+router.get("/getAllItems", async (req, res, next) => {
+  const items = (await Item.find({}).sort({name: 1})).map(x => x.toObject());
+  const batches = (await Batch.find({}).sort({itemName: 1, outDate: 1})).map(x => x.toObject());
+
+  let batchIndex = 0;
+
+  for (const item of items) {
+    // Skip batches corresponding to items with names before this item's name.
+    // This loop should only run if there are batches corresponding to items that
+    // no longer exist.
+    while (batchIndex < batches.length && batches[batchIndex].itemName < item.name) {
+      console.warn("Batch does not correspond to any existing item: ", batches[batchIndex]);
+      batchIndex++;
     }
-    res.send(items, 200);
-  });
+
+    // Add all batches of this item to an array.
+    item.batches = [];
+    while (batchIndex < batches.length && batches[batchIndex].itemName === item.name) {
+      item.batches.push(batches[batchIndex]);
+      batchIndex++;
+    }
+  }
+
+  res.status(200).send(items);
 });
 
-router.post("/addItem", (req, res, next) => {
-  // validate body params
-  const itemName = req.body["itemName"];
-  const itemId = req.body["itemId"];
-  const weight = req.body["weight"];
-  const today = toUTCMidnight(new Date());
-
-  if (itemName === undefined && itemId === undefined) {
-    res.send("Either itemName or itemId is required!", 400);
+router.post("/addItem", async (req, res, next) => {
+  // Validate request body fields.
+  try {
+    Assertions.assertObject(req.body, {
+      itemName: Assertions.assertString,
+      itemId: Assertions.assertString,
+      weight: Assertions.assertNumber,
+      outDate: Assertions.assertDateString,
+    });
+  } catch (e) {
+    res.status(400).send("body" + e.message);
     return;
   }
 
-  if (weight === undefined) {
-    res.send("Weight is required!", 400);
+  const { itemName, itemId, weight } = req.body;
+
+  const outDate = toUTCMidnight(new Date(req.body.outDate));
+
+  // Use today's date as the in date.
+  let inDate = toUTCMidnight();
+
+  if (outDate < inDate) {
+    res.status(400).send(`outDate "${req.body.outDate}" is in the past`);
     return;
   }
 
-  // create batch object
-  const batch = new Batch({
-    date: today,
-    pounds: weight,
-    fulfilled: false,
-  });
+  // Ensure that the requested item exists.
+  let item = await Item.findOne({ name: itemName }).exec();
+  if (item === null) {
+    item = await new Item({
+      name: itemName,
+      itemId,
+    }).save();
+  }
 
-  // check if the item already exist
-  Item.findOne({ name: itemName }, (err, item) => {
-    if (err) {
-      console.error(err);
-    }
+  // Get the batch corresponding to this item and out date,
+  // creating a new batch if necessary.
+  let batch = await Batch.findOne({ itemName, outDate }).exec();
+  if (batch === null) {
+    batch = await new Batch({
+      itemName,
+      inDate,
+      outDate,
+      poundsTotal: 0,
+      poundsRemaining: 0,
+    }).save();
+  }
 
-    if (item === null) {
-      // item does not exist, so create one and add the batch
-      let newItem = new Item({
-        name: itemName,
-        itemId: itemId,
-        batches: [batch],
-      });
-      newItem.save();
-    } else {
-      // if item already exist with same date, combine the two batches
-      for (let batch of item.batches) {
-        if (batch.date.toString() === today.toString()) {
-          // combine batches
-          batch.pounds += weight;
-          item.save();
-          return;
-        }
-      }
+  // Add the specified number of pounds to the current batch.
+  batch.poundsTotal += weight;
+  batch.poundsRemaining += weight;
+  await batch.save();
 
-      // append batch to item's batches since the batch doesn't already exist
-      item.batches.push(batch);
-      item.save();
-    }
-  });
-
-  res.send("Added!", 202);
+  res.status(202).send();
 });
 
 module.exports = router;
