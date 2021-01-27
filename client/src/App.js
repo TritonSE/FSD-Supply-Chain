@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import "./App.css";
+import AddButton from './add_button/AddButton'
 
 class App extends Component {
     constructor(props) {
@@ -22,6 +23,7 @@ class App extends Component {
         return (
             <div className="App">
                 <p> {this.state.apiResponse}</p>
+                <AddButton/>
             </div>
         );
     }
