@@ -3,12 +3,28 @@ const router = express.Router();
 
 const { Item } = require("../models/item");
 const { Batch } = require("../models/batch");
+const { User } = require("../models/user");
 const { toUTCMidnight } = require("../helpers/dateHelpers");
 const Assertions = require("../helpers/assertions");
+const token_required = require("../middleware/auth");
 
-router.get("/getAllItems", async (req, res, next) => {
-  const items = (await Item.find({}).sort({name: 1})).map(x => x.toObject());
-  const batches = (await Batch.find({}).sort({itemName: 1, outDate: 1})).map(x => x.toObject());
+router.get("/getAllItems", token_required, async (req, res, next) => {
+  // authentication
+  try {
+    // req.user is the user id fetched from Middleware
+    const user = await User.findById(req.user.id);
+  } catch (e) {
+    console.log(e);
+    res.send({ message: "Error in Fetching user" }, 401);
+    return;
+  }
+
+  const items = (await Item.find({}).sort({ name: 1 })).map((x) =>
+    x.toObject()
+  );
+  const batches = (
+    await Batch.find({}).sort({ itemName: 1, outDate: 1 })
+  ).map((x) => x.toObject());
 
   let batchIndex = 0;
 
@@ -16,14 +32,23 @@ router.get("/getAllItems", async (req, res, next) => {
     // Skip batches corresponding to items with names before this item's name.
     // This loop should only run if there are batches corresponding to items that
     // no longer exist.
-    while (batchIndex < batches.length && batches[batchIndex].itemName < item.name) {
-      console.warn("Batch does not correspond to any existing item: ", batches[batchIndex]);
+    while (
+      batchIndex < batches.length &&
+      batches[batchIndex].itemName < item.name
+    ) {
+      console.warn(
+        "Batch does not correspond to any existing item: ",
+        batches[batchIndex]
+      );
       batchIndex++;
     }
 
     // Add all batches of this item to an array.
     item.batches = [];
-    while (batchIndex < batches.length && batches[batchIndex].itemName === item.name) {
+    while (
+      batchIndex < batches.length &&
+      batches[batchIndex].itemName === item.name
+    ) {
       item.batches.push(batches[batchIndex]);
       batchIndex++;
     }
@@ -32,7 +57,17 @@ router.get("/getAllItems", async (req, res, next) => {
   res.status(200).send(items);
 });
 
-router.post("/addItem", async (req, res, next) => {
+router.post("/addItem", token_required, async (req, res, next) => {
+  // authentication
+  try {
+    // request.user is getting fetched from Middleware after token authentication
+    const user = await User.findById(req.user.id);
+    res.json(user);
+  } catch (e) {
+    res.send({ message: "Error in Fetching user" });
+    return;
+  }
+
   // Validate request body fields.
   try {
     Assertions.assertObject(req.body, {

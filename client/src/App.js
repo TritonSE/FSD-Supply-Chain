@@ -1,32 +1,19 @@
-import React, { Component } from "react";
+import React from "react";
+
+import { Router } from "@reach/router";
+import Home from "./home/Home";
+import Login from "./auth/Login";
+import Signup from "./auth/Signup";
 import "./App.css";
-import AddButton from './add_button/AddButton'
 
-class App extends Component {
-    constructor(props) {
-        super(props);
-        this.state = { apiResponse: "" };
-    }
-
-    callAPI() {
-        fetch("http://localhost:9000/")
-            .then(res => res.text())
-            .then(res => this.setState({ apiResponse: res }))
-            .catch(err => err);
-    }
-
-    componentDidMount() {
-        this.callAPI();
-    }
-
-    render() {
-        return (
-            <div className="App">
-                <p> {this.state.apiResponse}</p>
-                <AddButton/>
-            </div>
-        );
-    }
-}
+const App = () => {
+  return (
+    <Router className="App">
+      <Home path="/" />
+      <Login path="/login" />
+      <Signup path="/signup" />
+    </Router>
+  );
+};
 
 export default App;
