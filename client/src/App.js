@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "./App.css";
-import AddButton from './add_button/AddButton'
-
+import AddButton from './add_button/AddButton';
+import Sidebar from './sidebar/Sidebar';
 class App extends Component {
     constructor(props) {
         super(props);
@@ -24,6 +24,7 @@ class App extends Component {
             <div className="App">
                 <p> {this.state.apiResponse}</p>
                 <AddButton/>
+                <Sidebar/>
             </div>
         );
     }

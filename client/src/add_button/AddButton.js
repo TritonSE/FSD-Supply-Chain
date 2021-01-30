@@ -26,7 +26,7 @@ function AddItemForm(props) {
     const [itemId, setItemId] = useState('');
     const [lbPerHouse, setLbPerHouse] = useState(0);
     const [weight, setWeight] = useState(0);
-    const [outByDate, setOutByDate] = useState(new Date());
+    const [outDate, setOutDate] = useState(new Date());
 
     const [showWeightWarning, setWeightWarning] = useState(false);
     // Logic for adding recommendations will need to be added 
@@ -70,7 +70,7 @@ function AddItemForm(props) {
                     
                     <Form.Group>
                         <Form.Label>Out by date</Form.Label>
-                        <DatePicker selected={outByDate} onChange={date => setOutByDate(date)}/> 
+                        <DatePicker selected={outDate} onChange={date => setOutDate(date)}/> 
                     </Form.Group>
 
                     <Form.Group>
@@ -93,7 +93,7 @@ function AddItemForm(props) {
 
                 <Button variant='light' onClick={() => props.closeForm()}>Cancel</Button>
                 <Button variant='primary' onClick={() => {
-                    postNewItem(itemName, itemId, weight, outByDate);
+                    postNewItem(itemName, itemId, weight, outDate);
                     props.closeForm();   
                 }}>Submit</Button>
             </Form>
