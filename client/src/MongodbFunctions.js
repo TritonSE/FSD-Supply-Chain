@@ -8,7 +8,7 @@ export const postNewItem = (token, itemName, itemId, weight, outByDate) => {
       itemName: itemName,
       itemId: itemId,
       weight: weight,
-      outByDate: outByDate,
+      outDate: outByDate,
     }),
   }).then((res) => {
     if (res.status !== 202) {

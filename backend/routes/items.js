@@ -62,9 +62,9 @@ router.post("/addItem", token_required, async (req, res, next) => {
   try {
     // request.user is getting fetched from Middleware after token authentication
     const user = await User.findById(req.user.id);
-    res.json(user);
   } catch (e) {
-    res.send({ message: "Error in Fetching user" });
+    console.log(e);
+    res.send({ message: "Error in Fetching user" }, 401);
     return;
   }
 

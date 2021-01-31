@@ -4,6 +4,7 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import DatePicker from "react-datepicker";
 import NumericInput from "react-numeric-input";
+import { useCookies } from "react-cookie";
 import { postNewItem } from "../MongodbFunctions";
 
 import "./AddButton.scss";
@@ -32,6 +33,7 @@ function AddItemForm(props) {
   const [weight, setWeight] = useState(0);
   const [outByDate, setOutByDate] = useState(new Date());
 
+  const [cookies] = useCookies(["token"]);
   const [showWeightWarning, setWeightWarning] = useState(false);
   // Logic for adding recommendations will need to be added
   const [rec, setRec] = useState([]);
@@ -126,7 +128,7 @@ function AddItemForm(props) {
         <Button
           variant="primary"
           onClick={() => {
-            postNewItem(itemName, itemId, weight, outByDate);
+            postNewItem(cookies.token, itemName, itemId, weight, outByDate);
             props.closeForm();
           }}
         >

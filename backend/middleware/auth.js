@@ -5,7 +5,7 @@ module.exports = (req, res, next) => {
   if (!token) return res.status(401).json({ message: "Auth Error" });
 
   try {
-    const decoded = jwt.verify(token, "randomString"); // change this a stronger secret and add to .env file
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
     req.user = decoded.user;
     next();
   } catch (e) {

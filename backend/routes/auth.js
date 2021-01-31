@@ -36,7 +36,7 @@ router.post(
       });
       if (user) {
         return res.status(400).json({
-          message: "User Already Exists",
+          message: "Username Already Exists",
         });
       }
 
@@ -58,7 +58,7 @@ router.post(
 
       jwt.sign(
         payload,
-        "randomString", // change this to a stronger secret and don't commit it
+        process.env.JWT_SECRET,
         {
           expiresIn: 10000,
         },
@@ -105,15 +105,16 @@ router.post(
       let user = await User.findOne({
         username,
       });
+
       if (!user)
         return res.status(400).json({
-          message: "User does not exist",
+          message: "Incorrect username or password!",
         });
 
       const isMatch = await bcrypt.compare(password, user.password);
       if (!isMatch)
         return res.status(400).json({
-          message: "Incorrect password!",
+          message: "Incorrect username or password!",
         });
 
       const payload = {
@@ -124,7 +125,7 @@ router.post(
 
       jwt.sign(
         payload,
-        "randomString", // change this to something stronger and don't commit
+        process.env.JWT_SECRET,
         {
           expiresIn: 3600,
         },
