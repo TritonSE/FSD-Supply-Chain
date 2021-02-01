@@ -19,9 +19,10 @@ function SidebarItem({item}) {
             
             {expanded && 
                 item.batches.map(batch => {
-                    let date = new Date(batch.outDate).toString();
+                    const dateString = new Date(batch.outDate).toISOString()
+                            .replace(/^\d+-(\d+)-(\d+)T.*$/, "$1/$2");
                     return <div className="batch">
-                        <p>{itemName} - {date}</p>
+                        <p>{itemName} - {dateString}</p>
                     </div>
                 })
             }
