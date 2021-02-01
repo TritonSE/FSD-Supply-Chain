@@ -9,18 +9,19 @@ function Sidebar() {
     const [items, setItems] = useState([]);
 
     useEffect(() => {
-        
         getAllItems().then(items_raw => {
             setItems(items_raw);
             console.log(items_raw);
         })
-    }, [])
+    }, []);
 
     return (
         <div className='sidebar_container'>
-            {items.map(item => <SidebarItem item={item}/>)}
+            {items === null
+                ? <p>Could not connect to backend.</p>
+                : items.map(item => <SidebarItem item={item}/>)}
         </div>
-    )
+    );
 }
 
 export default Sidebar;
