@@ -22,7 +22,7 @@ function SidebarItem({item}) {
                     const dateString = new Date(batch.outDate).toISOString()
                             .replace(/^\d+-(\d+)-(\d+)T.*$/, "$1/$2");
                     return <div className="batch">
-                        <p>{itemName} - {dateString}</p>
+                        <p> &nbsp; &nbsp;{itemName} - {dateString}</p>
                     </div>
                 })
             }
