@@ -9,6 +9,7 @@ const { Item } = require("./models/item");
 
 const indexRouter = require("./routes/index");
 const itemRouter = require("./routes/items");
+const authRouter = require("./routes/auth");
 
 const app = express();
 
@@ -28,6 +29,7 @@ mongoose
 
 app.use("/", indexRouter);
 app.use("/items", itemRouter);
+app.use("/", authRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
