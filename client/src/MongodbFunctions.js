@@ -1,4 +1,4 @@
-const host = 'http://localhost:9000';
+const BACKEND_URL = 'http://localhost:9000';
 
 /**
  * Add a batch of an item.
@@ -10,7 +10,7 @@ const host = 'http://localhost:9000';
  */
 export const postNewItem = async (itemName, itemId, weight, outDate) => {
     try {
-        const response = await fetch(host + '/items/addItem', {
+        const response = await fetch(BACKEND_URL + '/items/addItem', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
@@ -39,12 +39,36 @@ export const postNewItem = async (itemName, itemId, weight, outDate) => {
  */
 export const getAllItems = async () => {
     try {
-        const response = await fetch(host + '/items/getAllItems', {
+        const response = await fetch(BACKEND_URL + '/items/getAllItems', {
             method: 'GET',
         });
-        return response.json();
+
+        if (response.status === 200) {
+          return response.json();
+        } else {
+          return null;
+        }
     } catch (e) {
         console.error(e);
         return null;
     }
 }
+
+export const auth = (route, username, password) => {
+  return fetch(BACKEND_URL + "/" + route, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      username: username,
+      password: password,
+    }),
+  });
+};
+
+export const signUp = (username, password) => {
+  return auth("signup", username, password);
+};
+
+export const login = (username, password) => {
+  return auth("login", username, password);
+};

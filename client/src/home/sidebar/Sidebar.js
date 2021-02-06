@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 
-import {getAllItems} from '../MongodbFunctions';
+import {getAllItems} from '../../MongodbFunctions';
 import SidebarItem from './SidebarItem';
 
 import './Sidebar.scss';
@@ -19,7 +19,7 @@ function Sidebar() {
         <div className='sidebar_container'>
             {items === null
                 ? <p>Could not connect to backend.</p>
-                : items.map(item => <SidebarItem item={item}/>)}
+                : <p>{Array.isArray(items).toString()}</p>/*items.map(item => <SidebarItem item={item}/>)*/}
         </div>
     );
 }

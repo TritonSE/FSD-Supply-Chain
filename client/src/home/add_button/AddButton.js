@@ -4,9 +4,9 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form'
 import DatePicker from 'react-datepicker'
 import NumericInput from 'react-numeric-input';
-import {postNewItem} from '../MongodbFunctions';
+import {postNewItem} from '../../MongodbFunctions';
 
-import './AddButton.scss'
+import './AddButton.scss';
 import "react-datepicker/dist/react-datepicker.css";
 
 function AddButton() {
