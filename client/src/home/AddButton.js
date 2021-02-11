@@ -69,13 +69,13 @@ function AddItemForm(props) {
           <Form.Group>
             <Form.Label>Weight(lbs)</Form.Label>
             <Form.Control
-              type="text"
+              type="number"
               placeholder="e.g. 50"
               onChange={(event) => {
                 let val = Number(event.target.value.trim());
 
                 // Checks for valid integer
-                if (val !== Infinity && String(val) === val) {
+                if (val !== Infinity && val > 0) {
                   setWeight(val);
                   setWeightWarning(false);
                 } else {

@@ -12,7 +12,7 @@ import "./auth.scss";
 
 const SignUp = (props) => {
   // Input fields
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [cookies, setCookie] = useCookies(["token"]);
@@ -25,7 +25,7 @@ const SignUp = (props) => {
       return;
     }
     if (
-      username.length === 0 ||
+      email.length === 0 ||
       password.length === 0 ||
       confirmPassword.length === 0
     ) {
@@ -33,7 +33,7 @@ const SignUp = (props) => {
       return;
     }
     // saves the token as a cookie
-    signUp(username, password).then(async (response) => {
+    signUp(email, password).then(async (response) => {
       const body = await response.json();
       if (!response.ok) {
         setError(body.message);
@@ -46,11 +46,11 @@ const SignUp = (props) => {
 
   const allFieldsFilled = useMemo(() => {
     return (
-      username.length !== 0 &&
+      email.length !== 0 &&
       password.length !== 0 &&
       confirmPassword.length !== 0
     );
-  }, [username, password, confirmPassword]);
+  }, [email, password, confirmPassword]);
 
   return (
     <div className="auth_form_container">
@@ -60,8 +60,8 @@ const SignUp = (props) => {
           <img class="icons" src={userIcon} alt="user icon"></img>
           <Form.Control
             type="text"
-            placeholder="Username"
-            onChange={(event) => setUsername(event.target.value.trim())}
+            placeholder="Email"
+            onChange={(event) => setEmail(event.target.value.trim())}
           />
         </Form.Group>
         <Form.Group className="input_field_container">
