@@ -8,16 +8,24 @@ Feeding San Diego helps reduce food waste by purchasing food from suppliers and 
 Clone the repo and install the dependencies in the frontend and the backend
 ```
 git clone https://github.com/TritonSE/Supply-Chain.git
-cd Suppy-Chain/backend
+cd Supply-Chain/backend
 npm install
 cd ../client
 npm install
 ```
 
 ### Running the project
+
+To run the backend:
 ```
-cd backend npm start
-cd ../client npm start
+cd ../backend 
+npm start
+```
+
+To run the frontend:
+```
+cd ../client
+npm start
 ```
 The webapp should now be running on http://localhost:3000/
 
