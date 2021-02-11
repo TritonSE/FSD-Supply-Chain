@@ -36,7 +36,7 @@ const SignUp = (props) => {
     signUp(email, password).then(async (response) => {
       const body = await response.json();
       if (!response.ok) {
-        setError(body.errors[0].msg);
+        setError(body.message);
       } else {
         setCookie("token", body.token);
         navigate("/");

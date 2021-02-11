@@ -26,7 +26,7 @@ const Login = (props) => {
         return;
       }
       if (!response.ok) {
-        setError(body.errors[0].msg);
+        setError(body.message);
       } else {
         setCookie("token", body.token);
         navigate("/");
