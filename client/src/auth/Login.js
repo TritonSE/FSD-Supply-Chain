@@ -12,21 +12,21 @@ import "./auth.scss";
 
 const Login = (props) => {
   // Input fields
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [cookies, setCookie] = useCookies(["token"]);
 
   const submitForm = (e) => {
     e.preventDefault();
-    login(username, password).then(async (response) => {
+    login(email, password).then(async (response) => {
       const body = await response.json();
-      if (username.length === 0 || password.length === 0) {
+      if (email.length === 0 || password.length === 0) {
         setError("Please fill in all fields");
         return;
       }
       if (!response.ok) {
-        setError(body.message);
+        setError(body.errors[0].msg);
       } else {
         setCookie("token", body.token);
         navigate("/");
@@ -35,8 +35,8 @@ const Login = (props) => {
   };
 
   const allFieldsFilled = useMemo(() => {
-    return username.length !== 0 && password.length !== 0;
-  }, [username, password]);
+    return email.length !== 0 && password.length !== 0;
+  }, [email, password]);
 
   return (
     <div className="auth_form_container">
@@ -46,9 +46,9 @@ const Login = (props) => {
           <img class="icons" src={userIcon} alt="user icon"></img>
           <Form.Control
             type="text"
-            placeholder="Username"
+            placeholder="Email"
             onChange={(event) => {
-              setUsername(event.target.value.trim());
+              setEmail(event.target.value.trim());
             }}
             required
           />

@@ -15,8 +15,7 @@ const { User } = require("../models/user");
 router.post(
   "/signup",
   [
-    check("username", "Please Enter a Valid Username").not().isEmpty(),
-    // check("email", "Please enter a valid email").isEmail(),
+    check("email", "Please enter a valid email").not().isEmpty().isEmail(),
     check("password", "Please enter a valid password").isLength({
       min: 1,
     }),
@@ -29,19 +28,19 @@ router.post(
       });
     }
 
-    const { username, password } = req.body;
+    const { email, password } = req.body;
     try {
       let user = await User.findOne({
-        username,
+        email,
       });
       if (user) {
         return res.status(400).json({
-          message: "Username Already Exists",
+          message: "Email Already Exists",
         });
       }
 
       user = new User({
-        username,
+        email,
         password,
       });
 
@@ -85,8 +84,7 @@ router.post(
 router.post(
   "/login",
   [
-    check("username", "Please Enter a Valid Username").not().isEmpty(),
-    //check("email", "Please enter a valid email").isEmail(),
+    check("email", "Please enter a valid email").not().isEmpty().isEmail(),
     check("password", "Please enter a valid password").isLength({
       min: 1,
     }),
@@ -100,21 +98,21 @@ router.post(
       });
     }
 
-    const { username, password } = req.body;
+    const { email, password } = req.body;
     try {
       let user = await User.findOne({
-        username,
+        email,
       });
 
       if (!user)
         return res.status(400).json({
-          message: "Incorrect username or password!",
+          message: "Incorrect email or password!",
         });
 
       const isMatch = await bcrypt.compare(password, user.password);
       if (!isMatch)
         return res.status(400).json({
-          message: "Incorrect username or password!",
+          message: "Incorrect email or password!",
         });
 
       const payload = {
