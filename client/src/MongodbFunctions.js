@@ -8,50 +8,50 @@ const BACKEND_URL = 'http://localhost:9000';
  * @param {string} outDate The date that this batch should be sent by.
  * @returns A Promise resolving to whether the batch of the item was successfully added.
  */
-export const postNewItem = async (itemName, itemId, weight, outDate) => {
-    try {
-        const response = await fetch(BACKEND_URL + '/items/addItem', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-                itemName,
-                itemId,
-                weight,
-                outDate,
-            })
-        });
+export const postNewItem = async (token, itemName, itemId, weight, outDate) => {
+  try {
+    const response = await fetch(BACKEND_URL + '/items/addItem', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json', token: token},
+      body: JSON.stringify({
+        itemName: itemName,
+        itemId: itemId,
+        weight: weight,
+        outDate: outDate,
+      })
+    });
 
-        if (response.status === 202) {
-            return true;
-        } else {
-            console.error(response);
-            return false;
-        }
-    } catch (e) {
-        console.error(e);
-        return false;
+    if (response.status === 202) {
+      return true;
+    } else {
+      return false;
     }
+  } catch (e) {
+    console.error(e);
+    return false;
+  }
 }
 
 /**
  * Get all items and item batches.
  * @returns A Promise resolving to an array of item information, or null if the request fails.
  */
-export const getAllItems = async () => {
-    try {
-        const response = await fetch(BACKEND_URL + '/items/getAllItems', {
-            method: 'GET',
-        });
+export const getAllItems = async (token) => {
+  try {
+    const response = await fetch(BACKEND_URL + '/items/getAllItems', {
+      method: 'GET',
+      headers: {token: token}
+    });
 
-        if (response.status === 200) {
-          return response.json();
-        } else {
-          return null;
-        }
-    } catch (e) {
-        console.error(e);
-        return null;
+    if (response.status === 200) {
+      return response.json();
+    } else {
+      return null;
     }
+  } catch (e) {
+      console.error(e);
+      return null;
+  }
 }
 
 export const auth = (route, email, password) => {
