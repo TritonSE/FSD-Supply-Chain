@@ -72,7 +72,6 @@ router.post("/addItem", token_required, async (req, res, next) => {
   try {
     Assertions.assertObject(req.body, {
       itemName: Assertions.assertString,
-      itemId: Assertions.assertString,
       weight: Assertions.assertNumber,
       outDate: Assertions.assertDateString,
     });
@@ -81,7 +80,7 @@ router.post("/addItem", token_required, async (req, res, next) => {
     return;
   }
 
-  const { itemName, itemId, weight } = req.body;
+  const { itemName, weight } = req.body;
 
   const outDate = toUTCMidnight(new Date(req.body.outDate));
 
@@ -98,7 +97,6 @@ router.post("/addItem", token_required, async (req, res, next) => {
   if (item === null) {
     item = await new Item({
       name: itemName,
-      itemId,
     }).save();
   }
 

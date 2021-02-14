@@ -1,12 +1,11 @@
 const BACKEND_URL = "http://localhost:9000";
 
-export const postNewItem = (token, itemName, itemId, weight, outByDate) => {
+export const postNewItem = (token, itemName, weight, outByDate) => {
   fetch(BACKEND_URL + "/items/addItem", {
     method: "POST",
     headers: { "Content-Type": "application/json", token: token },
     body: JSON.stringify({
       itemName: itemName,
-      itemId: itemId,
       weight: weight,
       outDate: outByDate,
     }),
