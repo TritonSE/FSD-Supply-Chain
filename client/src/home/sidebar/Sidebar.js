@@ -25,7 +25,7 @@ function Sidebar() {
     a = new Date(a.outDate);
     b = new Date(b.outDate);
     let diff = a.getTime() - b.getTime();
-    if (diff != 0) {
+    if (diff !== 0) {
       return diff;
     }
     
