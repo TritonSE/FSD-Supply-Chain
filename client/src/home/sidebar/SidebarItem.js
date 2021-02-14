@@ -3,6 +3,8 @@ import React, {useEffect, useState} from 'react';
 import {AiOutlinePlusCircle, AiFillMinusCircle} from 'react-icons/ai'
 import './SidebarItem.scss'
 
+// Item component when sorting by alphabetical
+// Expects item object with batches. Also supports clicking to expand
 export const SidebarItemAlpha = ({item, expand}) => {
   const [expanded, setExpanded] = useState(expand);
   
@@ -31,6 +33,8 @@ export const SidebarItemAlpha = ({item, expand}) => {
   )
 }
 
+// Item component when sorting by expiry
+// Expects an individual batch object.
 export const SidebarItemExpiry = ({batch}) => {
   return (
     <div className='sidebar_item_container'>
