@@ -1,0 +1,21 @@
+.sidebar_container {
+  padding-top: 80px;
+  padding-left: 15px;
+  text-align: left;
+
+  #expand_all_btn {
+    &:hover{
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    margin-left: 10px;
+    color: grey;
+  }
+
+  #sort_by_dropdown {
+    margin-left: 10px;
+    margin-bottom: 15px;
+    width: 130px;
+  }
+}

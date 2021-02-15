@@ -5,7 +5,7 @@ import Form from "react-bootstrap/Form";
 import DatePicker from "react-datepicker";
 import NumericInput from "react-numeric-input";
 import { useCookies } from "react-cookie";
-import { postNewItem } from "../MongodbFunctions";
+import { postNewItem } from "../../MongodbFunctions";
 
 import "./AddButton.scss";
 import "react-datepicker/dist/react-datepicker.css";
@@ -52,7 +52,7 @@ function AddItemForm(props) {
               }
             />
           </Form.Group>
-
+          
           <b>OR</b>
 
           <Form.Group>
