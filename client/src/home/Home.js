@@ -2,7 +2,8 @@ import React, { useEffect } from "react";
 import { useCookies } from "react-cookie";
 import { navigate } from "@reach/router";
 
-import AddButton from "./AddButton";
+import AddButton from "./add_button/AddButton";
+import Sidebar from "./sidebar/Sidebar";
 
 const Home = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["token"]);
@@ -21,6 +22,7 @@ const Home = () => {
   return (
     <div>
       <AddButton />
+      <Sidebar />
       <button onClick={logout}>Logout</button>
     </div>
   );
