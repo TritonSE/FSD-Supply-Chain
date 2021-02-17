@@ -3,17 +3,19 @@ const BACKEND_URL = 'http://localhost:9000';
 /**
  * Add a batch of an item.
  * @param {string} itemName The name of the item.
+ * @param {string} batchId The id of the batch.
  * @param {number} weight The number of pounds to add.
  * @param {string} outDate The date that this batch should be sent by.
  * @returns A Promise resolving to whether the batch of the item was successfully added.
  */
-export const postNewItem = async (token, itemName, weight, outDate) => {
+export const postNewItem = async (token, itemName, batchId, weight, outDate) => {
   try {
     const response = await fetch(BACKEND_URL + '/items/addItem', {
       method: 'POST',
       headers: {'Content-Type': 'application/json', token: token},
       body: JSON.stringify({
         itemName: itemName,
+        batchId: batchId,
         weight: weight,
         outDate: outDate,
       })
