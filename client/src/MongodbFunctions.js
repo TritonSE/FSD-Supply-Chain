@@ -3,7 +3,6 @@ const BACKEND_URL = 'http://localhost:9000';
 /**
  * Add a batch of an item.
  * @param {string} itemName The name of the item.
- * @param {string} itemId The ID of the item.
  * @param {number} weight The number of pounds to add.
  * @param {string} outDate The date that this batch should be sent by.
  * @returns A Promise resolving to whether the batch of the item was successfully added.
