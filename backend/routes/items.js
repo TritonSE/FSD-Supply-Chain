@@ -23,7 +23,7 @@ router.get("/getAllItems", token_required, async (req, res, next) => {
     x.toObject()
   );
   const batches = (
-    await Batch.find({}).sort({ itemName: 1, outDate: 1 })
+    await Batch.find({}).sort({ itemName: 1, outDate: 1, batchId: 1 })
   ).map((x) => x.toObject());
 
   let batchIndex = 0;
@@ -72,6 +72,7 @@ router.post("/addItem", token_required, async (req, res, next) => {
   try {
     Assertions.assertObject(req.body, {
       itemName: Assertions.assertString,
+      batchId: Assertions.assertString,
       weight: Assertions.assertNumber,
       outDate: Assertions.assertDateString,
     });
@@ -80,7 +81,7 @@ router.post("/addItem", token_required, async (req, res, next) => {
     return;
   }
 
-  const { itemName, weight } = req.body;
+  const { itemName, weight, batchId } = req.body;
 
   const outDate = toUTCMidnight(new Date(req.body.outDate));
 
@@ -102,12 +103,13 @@ router.post("/addItem", token_required, async (req, res, next) => {
 
   // Get the batch corresponding to this item and out date,
   // creating a new batch if necessary.
-  let batch = await Batch.findOne({ itemName, outDate }).exec();
+  let batch = await Batch.findOne({ itemName, outDate, batchId }).exec();
   if (batch === null) {
     batch = await new Batch({
       itemName,
       inDate,
       outDate,
+      batchId,
       poundsTotal: 0,
       poundsRemaining: 0,
     }).save();
