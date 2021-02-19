@@ -8,14 +8,13 @@ const BACKEND_URL = 'http://localhost:9000';
  * @param {string} outDate The date that this batch should be sent by.
  * @returns A Promise resolving to whether the batch of the item was successfully added.
  */
-export const postNewItem = async (token, itemName, itemId, weight, outDate) => {
+export const postNewItem = async (token, itemName, weight, outDate) => {
   try {
     const response = await fetch(BACKEND_URL + '/items/addItem', {
       method: 'POST',
       headers: {'Content-Type': 'application/json', token: token},
       body: JSON.stringify({
         itemName: itemName,
-        itemId: itemId,
         weight: weight,
         outDate: outDate,
       })
