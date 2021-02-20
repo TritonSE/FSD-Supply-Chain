@@ -89,7 +89,9 @@ router.post("/addItem", token_required, async (req, res, next) => {
   let inDate = toUTCMidnight();
 
   if (outDate < inDate) {
-    res.status(400).send(`outDate "${req.body.outDate}" is in the past`);
+    res.status(400).json({
+      message: "Outdate is in the past",
+    });
     return;
   }
 
@@ -101,26 +103,28 @@ router.post("/addItem", token_required, async (req, res, next) => {
     }).save();
   }
 
-  // Get the batch corresponding to this item and out date,
-  // creating a new batch if necessary.
-  let batch = await Batch.findOne({ itemName, outDate, batchId }).exec();
-  if (batch === null) {
-    batch = await new Batch({
-      itemName,
-      inDate,
-      outDate,
-      batchId,
-      poundsTotal: 0,
-      poundsRemaining: 0,
-    }).save();
+  // Ensure Batch is unique
+  let batchIdExist = await Batch.findOne({ batchId }).exec();
+  if (batchIdExist) {
+    return res.status(400).json({
+      message: "Batch ID already exists!",
+    });
   }
 
-  // Add the specified number of pounds to the current batch.
-  batch.poundsTotal += weight;
-  batch.poundsRemaining += weight;
-  await batch.save();
+  // Adds a batch with the unique ID
+  let batch = await new Batch({
+    itemName,
+    inDate,
+    outDate,
+    batchId,
+    poundsTotal: weight,
+    poundsRemaining: weight,
+  }).save();
 
-  res.status(202).send();
+  res.status(202).json({
+    message: "Successfully saved!",
+    batch,
+  });
 });
 
 module.exports = router;
