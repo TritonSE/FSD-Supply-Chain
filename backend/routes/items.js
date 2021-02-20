@@ -15,8 +15,7 @@ router.get("/getAllItems", token_required, async (req, res, next) => {
     const user = await User.findById(req.user.id);
   } catch (e) {
     console.log(e);
-    res.send({ message: "Error in Fetching user" }, 401);
-    return;
+    return res.send({ message: "Error in Fetching user" }, 401);
   }
 
   const items = (await Item.find({}).sort({ name: 1 })).map((x) =>
@@ -64,8 +63,7 @@ router.post("/addItem", token_required, async (req, res, next) => {
     const user = await User.findById(req.user.id);
   } catch (e) {
     console.log(e);
-    res.send({ message: "Error in Fetching user" }, 401);
-    return;
+    return res.send({ message: "Error in Fetching user" }, 401);
   }
 
   // Validate request body fields.
@@ -77,8 +75,7 @@ router.post("/addItem", token_required, async (req, res, next) => {
       outDate: Assertions.assertDateString,
     });
   } catch (e) {
-    res.status(400).send("body" + e.message);
-    return;
+    return res.status(400).send("body" + e.message);
   }
 
   const { itemName, weight, batchId } = req.body;
@@ -89,10 +86,9 @@ router.post("/addItem", token_required, async (req, res, next) => {
   let inDate = toUTCMidnight();
 
   if (outDate < inDate) {
-    res.status(400).json({
+    return res.status(400).json({
       message: "Outdate is in the past",
     });
-    return;
   }
 
   // Ensure that the requested item exists.
