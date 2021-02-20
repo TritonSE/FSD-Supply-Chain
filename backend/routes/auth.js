@@ -55,20 +55,13 @@ router.post(
         },
       };
 
-      jwt.sign(
-        payload,
-        process.env.JWT_SECRET,
-        {
-          expiresIn: 10000,
-        },
-        (err, token) => {
-          if (err) throw err;
+      jwt.sign(payload, process.env.JWT_SECRET, (err, token) => {
+        if (err) throw err;
 
-          res.status(200).json({
-            token,
-          });
-        }
-      );
+        res.status(200).json({
+          token,
+        });
+      });
     } catch (err) {
       console.log(err.message);
       res.status(500).send("Error in Saving");
@@ -120,19 +113,12 @@ router.post(
         },
       };
 
-      jwt.sign(
-        payload,
-        process.env.JWT_SECRET,
-        {
-          expiresIn: 3600,
-        },
-        (err, token) => {
-          if (err) throw err;
-          res.status(200).json({
-            token,
-          });
-        }
-      );
+      jwt.sign(payload, process.env.JWT_SECRET, (err, token) => {
+        if (err) throw err;
+        res.status(200).json({
+          token,
+        });
+      });
     } catch (e) {
       console.error(e);
       res.status(500).json({
