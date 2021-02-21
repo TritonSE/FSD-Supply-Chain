@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
@@ -6,11 +6,12 @@ import DatePicker from "react-datepicker";
 import NumericInput from "react-numeric-input";
 import { useCookies } from "react-cookie";
 import { postNewItem } from "../../MongodbFunctions";
+import { ReactSearchAutocomplete } from 'react-search-autocomplete';
 
 import "./AddButton.scss";
 import "react-datepicker/dist/react-datepicker.css";
 
-function AddButton() {
+function AddButton(props) {
   const [formRendered, toggleFormRendered] = useState(false);
 
   return (
@@ -19,7 +20,7 @@ function AddButton() {
         Add Item
       </Button>
       {formRendered && (
-        <AddItemForm closeForm={() => toggleFormRendered(false)}></AddItemForm>
+        <AddItemForm itemList={props.itemList} closeForm={() => toggleFormRendered(false)}></AddItemForm>
       )}
     </div>
   );
@@ -37,6 +38,11 @@ function AddItemForm(props) {
   const [showWeightWarning, setWeightWarning] = useState(false);
   // Logic for adding recommendations will need to be added
   const [rec, setRec] = useState([]);
+  const [itemList, setItemList] = useState([]);
+
+  useEffect(() => {
+    setItemList(props.itemList);
+  }, [props.itemList])
 
   return (
     <div className="add_item_form_container">
@@ -44,12 +50,19 @@ function AddItemForm(props) {
         <Form.Group className="input_field_container">
           <Form.Group>
             <Form.Label>Item Name</Form.Label>
-            <Form.Control
-              type="text"
+            <ReactSearchAutocomplete
+              items={props.itemList}
+              onSearch={string => setItemName(string)}
+              onSelect={item => setItemName(item.name)}
               placeholder="e.g. Apples"
-              onChange={(event) =>
-                setItemName(event.target.value.trim().toLowerCase())
-              }
+              autoFocus
+              styling={{
+                border: "1px solid #cbcdd1",
+                borderRadius: '5px',
+                boxShadow: "0 0 0 0.2rem rgba(0,123,255,.25)",
+                hoverBackgroundColor: "#80bdff",
+                height: '40px',
+              }}
             />
           </Form.Group>
           
