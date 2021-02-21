@@ -87,6 +87,7 @@ router.post("/addItem", token_required, async (req, res, next) => {
 
   if (outDate < inDate) {
     return res.status(400).json({
+      fieldName: "outDate",
       message: "Outdate is in the past",
     });
   }
@@ -103,6 +104,7 @@ router.post("/addItem", token_required, async (req, res, next) => {
   let batchIdExist = await Batch.findOne({ batchId }).exec();
   if (batchIdExist) {
     return res.status(400).json({
+      fieldName: "batchId",
       message: "Batch ID already exists!",
     });
   }
