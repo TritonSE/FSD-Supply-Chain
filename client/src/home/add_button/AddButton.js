@@ -28,13 +28,15 @@ function AddButton() {
 function AddItemForm(props) {
   // Input fields
   const [itemName, setItemName] = useState("");
-  const [itemId, setItemId] = useState("");
+  const [batchId, setbatchId] = useState("");
   const [lbPerHouse, setLbPerHouse] = useState(0);
   const [weight, setWeight] = useState(0);
   const [outByDate, setOutByDate] = useState(new Date());
 
   const [cookies] = useCookies(["token"]);
   const [showWeightWarning, setWeightWarning] = useState(false);
+  const [showitemNameWarning, setitemNameWarning] = useState(false);
+  const [showbatchIdWarning, setbatchIdWarning] = useState(false);
   // Logic for adding recommendations will need to be added
   const [rec, setRec] = useState([]);
 
@@ -47,23 +49,44 @@ function AddItemForm(props) {
             <Form.Control
               type="text"
               placeholder="e.g. Apples"
-              onChange={(event) =>
-                setItemName(event.target.value.trim().toLowerCase())
-              }
+              onChange={(event) =>{
+                let val = event.target.value.trim().toLowerCase();
+                if(val.length > 0){
+                  setItemName(event.target.value.trim().toLowerCase());
+                  setitemNameWarning(false);
+                }
+                else{
+                  setitemNameWarning(true);
+                }
+                
+              }}
             />
+            {showitemNameWarning && (
+              <Form.Text className="warning">Item name is required</Form.Text>
+            )}
           </Form.Group>
-          
-          <b>OR</b>
 
           <Form.Group>
-            <Form.Label>Item Number</Form.Label>
+            <Form.Label>Batch ID</Form.Label>
             <Form.Control
               type="text"
               placeholder="e.g. 1234"
               onChange={(event) => {
-                setItemId(event.target.value.trim().toLowerCase());
+                let val = event.target.value.trim().toLowerCase();
+                if(val.length > 0){
+                  setbatchId(event.target.value.trim().toLowerCase());
+                  setbatchIdWarning(false);
+                }
+                else{
+                  setbatchIdWarning(true);
+                }
+                
+                
               }}
             />
+            {showbatchIdWarning && (
+              <Form.Text className="warning">Batch ID is required</Form.Text>
+            )}
           </Form.Group>
 
           <Form.Group>
@@ -127,10 +150,19 @@ function AddItemForm(props) {
         </Button>
         <Button
           variant="primary"
-          onClick={() => {
-            postNewItem(cookies.token, itemName, itemId, weight, outByDate);
-            props.closeForm();
-          }}
+          
+            onClick={() => {
+              if(itemName.length > 0 && batchId.length > 0){
+                postNewItem(cookies.token, itemName, batchId, weight, outByDate);
+                props.closeForm();
+              }
+              else{
+                <Button.Text className="warning">One or more required feild is invalid</Button.Text>
+              }
+            }}  
+            
+
+     
         >
           Submit
         </Button>
