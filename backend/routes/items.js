@@ -15,8 +15,7 @@ router.get("/getAllItems", token_required, async (req, res, next) => {
     const user = await User.findById(req.user.id);
   } catch (e) {
     console.log(e);
-    res.send({ message: "Error in Fetching user" }, 401);
-    return;
+    return res.send({ message: "Error in Fetching user" }, 401);
   }
 
   const items = (await Item.find({}).sort({ name: 1 })).map((x) =>
@@ -64,8 +63,7 @@ router.post("/addItem", token_required, async (req, res, next) => {
     const user = await User.findById(req.user.id);
   } catch (e) {
     console.log(e);
-    res.send({ message: "Error in Fetching user" }, 401);
-    return;
+    return res.send({ message: "Error in Fetching user" }, 401);
   }
 
   // Validate request body fields.
@@ -77,8 +75,7 @@ router.post("/addItem", token_required, async (req, res, next) => {
       outDate: Assertions.assertDateString,
     });
   } catch (e) {
-    res.status(400).send("body" + e.message);
-    return;
+    return res.status(400).send("body" + e.message);
   }
 
   const { itemName, weight, batchId } = req.body;
@@ -89,8 +86,10 @@ router.post("/addItem", token_required, async (req, res, next) => {
   let inDate = toUTCMidnight();
 
   if (outDate < inDate) {
-    res.status(400).send(`outDate "${req.body.outDate}" is in the past`);
-    return;
+    return res.status(400).json({
+      fieldName: "outDate",
+      message: "Outdate is in the past",
+    });
   }
 
   // Ensure that the requested item exists.
@@ -101,26 +100,29 @@ router.post("/addItem", token_required, async (req, res, next) => {
     }).save();
   }
 
-  // Get the batch corresponding to this item and out date,
-  // creating a new batch if necessary.
-  let batch = await Batch.findOne({ itemName, outDate, batchId }).exec();
-  if (batch === null) {
-    batch = await new Batch({
-      itemName,
-      inDate,
-      outDate,
-      batchId,
-      poundsTotal: 0,
-      poundsRemaining: 0,
-    }).save();
+  // Ensure Batch is unique
+  let batchIdExist = await Batch.findOne({ batchId }).exec();
+  if (batchIdExist) {
+    return res.status(400).json({
+      fieldName: "batchId",
+      message: "Batch ID already exists!",
+    });
   }
 
-  // Add the specified number of pounds to the current batch.
-  batch.poundsTotal += weight;
-  batch.poundsRemaining += weight;
-  await batch.save();
+  // Adds a batch with the unique ID
+  let batch = await new Batch({
+    itemName,
+    inDate,
+    outDate,
+    batchId,
+    poundsTotal: weight,
+    poundsRemaining: weight,
+  }).save();
 
-  res.status(202).send();
+  res.status(202).json({
+    message: "Successfully saved!",
+    batch,
+  });
 });
 
 module.exports = router;
