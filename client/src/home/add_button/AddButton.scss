@@ -1,37 +1,37 @@
 .AddButton {
-    float: left;
+  float: left;
 }
 
 .add_item_form_container {
-    position: absolute;
-    top: 100px;     // adjust placement here
-    left: 50px;
-    
-    width: 300px;
-    padding: 20px;
-    background: #FFFFFF;
-    box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.25);
-    border-radius: 5px;
+  position: absolute;
+  top: 100px;     // adjust placement here
+  left: 50px;
+  
+  width: 300px;
+  padding: 20px;
+  background: #FFFFFF;
+  box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.25);
+  border-radius: 5px;
 
-    .add_item_form {
-        .input_field_container {
-            text-align: left;
+  .add_item_form {
+    .input_field_container {
+      text-align: left;
 
-            .recommendation_pos {
-                color: #32B537;
-            }
+      .recommendation_pos {
+        color: #32B537;
+      }
 
-            .recommendation_neg {
-                color: #DD4040;
-            }
+      .recommendation_neg {
+        color: #DD4040;
+      }
 
-            #household_calculator {
-                padding-left: 75px;
-            }
+      #household_calculator {
+        padding-left: 75px;
+      }
 
-            .warning{
-                color: #DD4040
-            }
-        }
+      .warning{
+        color: #DD4040
+      }
     }
+  }
 }
