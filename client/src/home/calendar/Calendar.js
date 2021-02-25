@@ -136,7 +136,7 @@ class Calendar extends Component {
       canResize={false}
       itemTouchSendsClick={true}
       selected={[]}
-      //itemHeightRatio={1}
+      itemHeightRatio={1}
       resizeDetector={containerResizeDetector}
       visibleTimeStart={+moment().startOf('month')}
       visibleTimeEnd={+moment().endOf('month')}
@@ -168,6 +168,7 @@ class Calendar extends Component {
         </CustomHeader>
       </TimelineHeaders>
       <TimelineMarkers>
+        {/* TODO: refresh periodically, in case the page is left open for multiple days */}
         <CustomMarker date={noon} style={{zIndex: 100}}>
           {({ styles }) => (
             <div style={{...styles, zIndex: 100, width: "1px"}} />
