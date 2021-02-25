@@ -5,12 +5,14 @@ import { navigate } from "@reach/router";
 
 import AddButton from "./add_button/AddButton";
 import Sidebar from "./sidebar/Sidebar";
+import Calendar from "./calendar/Calendar";
 
 const Home = () => {
   const [cookies, removeCookie] = useCookies(["token"]);
   const [itemList, setItemList] = useState([]);
   const [itemsAlpha, setItemsAlpha] = useState([]);
   const [itemsExpiry, setItemsExpiry] = useState([]);
+  const [items, setItems] = useState([]);
 
   const logout = () => {
     removeCookie("token");
@@ -44,6 +46,9 @@ const Home = () => {
   // Retrieve all items from MongoDB 
   useEffect(() => {
     getAllItems(cookies.token).then(items_raw => {
+      setItems(JSON.parse(JSON.stringify(items_raw)));
+      console.log(items_raw);
+
       console.log(items_raw);
       var batches_raw = [];
       var itemNames = [];
@@ -76,6 +81,7 @@ const Home = () => {
     <div>
       <AddButton itemList={itemList}/>
       <Sidebar itemsAlpha={itemsAlpha} itemsExpiry={itemsExpiry}/>
+      <Calendar items={items}/>
       <button onClick={logout}>Logout</button>
     </div>
   );

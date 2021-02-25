@@ -1,0 +1,89 @@
+$bg-color: #fbfbfb;
+$bg-dark: #ededed;
+$bg-border: #d3d3d3;
+$fg-color: #232323;
+
+.react-calendar-timeline {
+  background: $bg-color;
+  color: $fg-color;
+}
+
+.react-calendar-timeline .rct-sidebar {
+  border: 0;
+  //border-right: 1px solid $bg-border;
+}
+
+.react-calendar-timeline .rct-sidebar .rct-sidebar-row.rct-sidebar-row-odd,
+.react-calendar-timeline .rct-sidebar .rct-sidebar-row.rct-sidebar-row-even {
+  border: 0;
+  background: $bg-color;
+}
+
+.react-calendar-timeline .rct-vertical-lines .rct-vl {
+  border-left: 1px solid $bg-border;
+  border-right: 1px solid $bg-border;
+}
+
+.react-calendar-timeline .rct-vertical-lines .rct-vl.rct-day-6, .react-calendar-timeline .rct-vertical-lines .rct-vl.rct-day-0 {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.react-calendar-timeline .rct-horizontal-lines .rct-hl-even,
+.react-calendar-timeline .rct-horizontal-lines .rct-hl-odd {
+  border: 0;
+  background: inherit;
+  border-bottom: 1px solid $bg-border;
+  border-top: 1px solid $bg-border;
+}
+
+.react-calendar-timeline .rct-dateHeader {
+  border: 0;
+  background: inherit;
+  color: inherit;
+}
+
+.react-calendar-timeline .rct-dateHeader-primary {
+  border: 0;
+  background: inherit;
+  color: inherit;
+}
+
+.react-calendar-timeline .rct-dateHeaderInterval {
+  text-align: center;
+  height: 100%;
+}
+
+.react-calendar-timeline .rct-dateHeaderInterval.rct-dateHeaderIntervalToday {
+  color: $bg-color;
+  background: $fg-color;
+  border-radius: 15px;
+}
+
+.react-calendar-timeline .rct-header-root {
+  border: 0;
+  background: inherit;
+  color: inherit;
+}
+
+.react-calendar-timeline .rct-calendar-header {
+  border: 0;
+  border-bottom: 1px solid $bg-border;
+}
+
+.react-calendar-timeline .rct-item {
+  //border-radius: 15px;
+}
+.react-calendar-timeline .rct-item .rct-item-content {
+  //border: 0;
+  display: flex;
+  flex-flow: row-reverse nowrap;
+  justify-content: space-between;
+}
+
+.react-calendar-timeline .rct-item-title {
+  display: inline-block;
+  min-width: 0px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  height: 100%;
+}
