@@ -15,23 +15,24 @@ const Login = (props) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [dbWarning, setdbWarning] = useState("");
   const [cookies, setCookie] = useCookies(["token"]);
 
   const submitForm = (e) => {
     e.preventDefault();
+    if (email.length === 0 || password.length === 0) {
+      return setError("Please fill in all fields");
+    }
+    
     login(email, password).then(async (response) => {
       const body = await response.json();
-      if (email.length === 0 || password.length === 0) {
-        setError("Please fill in all fields");
-        return;
-      }
       if (!response.ok) {
         setError(body.message);
       } else {
         setCookie("token", body.token);
         navigate("/");
       }
-    });
+    }).catch((err) => setError("Database is not connected"));
   };
 
   const allFieldsFilled = useMemo(() => {
