@@ -125,4 +125,25 @@ router.post("/addItem", token_required, async (req, res, next) => {
   });
 });
 
+router.put("/editItem", token_required, async (req, res, next) => {
+  // authentication
+  try {
+    // req.user is the user id fetched from Middleware
+    const user = await User.findById(req.user.id);
+  } catch (e) {
+    console.log(e);
+    return res.send({ message: "Error in Fetching user" }, 401);
+  }
+
+  try {
+    const { itemName, batchId, weight } = req.body;
+    const outDate = toUTCMidnight(new Date(req.body.outDate));
+    const batch = await Batch.findOneAndUpdate({ batchId }, { outDate, poundsRemaining: weight });
+    batch.save();
+    res.status(200).json({ message: "Successfully edited!" });
+  } catch (e) {
+      return res.status(400).send("body" + e.message);
+  }
+})
+
 module.exports = router;
