@@ -25,7 +25,7 @@ require("dotenv").config();
 const PORT = process.env.PORT || 9000;
 
 mongoose
-  .connect(process.env.DB, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true })
+  .connect(process.env.DB, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true, useFindAndModify: false })
   .then(() => console.log(`Server running on port ${PORT}`))
   .catch((err) => console.log(err));
 
