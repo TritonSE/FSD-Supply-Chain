@@ -15,7 +15,6 @@ const Login = (props) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [dbWarning, setdbWarning] = useState("");
   const [cookies, setCookie] = useCookies(["token"]);
 
   const submitForm = (e) => {
