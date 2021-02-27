@@ -150,9 +150,9 @@ router.put("/editItem", token_required, async (req, res, next) => {
       return res.status(400).json({ fieldName: "poundsRemaining", message: "Pounds remaining is greater than pounds total" })
     }
     
-    await Batch.findOneAndUpdate({ itemName, batchId }, { outDate, poundsRemaining: weight });
+    batch = await Batch.findOneAndUpdate({ itemName, batchId }, { outDate, poundsRemaining: weight });
     batch.save();
-    res.status(200).json({ message: "Successfully edited!" });
+    res.status(200).json({ message: "Successfully edited!", batch });
   } catch (e) {
       return res.status(400).send("body" + e.message);
   }
