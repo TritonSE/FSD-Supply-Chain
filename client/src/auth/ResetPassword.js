@@ -4,8 +4,6 @@ import { navigate } from "@reach/router";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { resetPassword } from "../MongodbFunctions";
-import { useCookies } from "react-cookie";
-import userIcon from "../assets/icons/user.svg";
 import passwordIcon from "../assets/icons/password.svg";
 
 import "./auth.scss";

@@ -1,5 +1,5 @@
-import React, { useState, useMemo } from "react";
-import { navigate, Link } from "@reach/router";
+import React, { useState } from "react";
+import { Link } from "@reach/router";
 
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
