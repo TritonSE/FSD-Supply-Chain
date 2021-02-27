@@ -138,7 +138,7 @@ router.put("/editItem", token_required, async (req, res, next) => {
   try {
     const { itemName, batchId, weight } = req.body;
     const outDate = toUTCMidnight(new Date(req.body.outDate));
-    const batch = await Batch.findOne({ itemName, batchId });
+    let batch = await Batch.findOne({ itemName, batchId });
     
     if (outDate < batch.inDate) {
       return res.status(400).json({
