@@ -138,7 +138,19 @@ router.put("/editItem", token_required, async (req, res, next) => {
   try {
     const { itemName, batchId, weight } = req.body;
     const outDate = toUTCMidnight(new Date(req.body.outDate));
-    const batch = await Batch.findOneAndUpdate({ batchId }, { outDate, poundsRemaining: weight });
+    const batch = await Batch.findOne({ itemName, batchId });
+    
+    if (outDate < batch.inDate) {
+      return res.status(400).json({
+        fieldName: "outDate",
+        message: "Outdate is in the past",
+      });
+    }
+    if (weight > batch.poundsTotal) {
+      return res.status(400).json({ fieldName: "poundsRemaining", message: "Pounds remaining is greater than pounds total" })
+    }
+    
+    await Batch.findOneAndUpdate({ itemName, batchId }, { outDate, poundsRemaining: weight });
     batch.save();
     res.status(200).json({ message: "Successfully edited!" });
   } catch (e) {
