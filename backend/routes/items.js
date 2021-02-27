@@ -139,22 +139,22 @@ router.put("/editItem", token_required, async (req, res, next) => {
     const { itemName, batchId, weight } = req.body;
     const outDate = toUTCMidnight(new Date(req.body.outDate));
     let batch = await Batch.findOne({ itemName, batchId });
-    
+    let poundsTotal = batch.poundsTotal;
+
     if (outDate < batch.inDate) {
-      return res.status(400).json({
-        fieldName: "outDate",
-        message: "Outdate is in the past",
-      });
-    }
-    if (weight > batch.poundsTotal) {
-      return res.status(400).json({ fieldName: "poundsRemaining", message: "Pounds remaining is greater than pounds total" })
+      return res.status(400).json({ fieldName: "outDate", message: "Outdate is in the past" });
     }
     
-    batch = await Batch.findOneAndUpdate({ itemName, batchId }, { outDate, poundsRemaining: weight });
-    batch.save();
-    res.status(200).json({ message: "Successfully edited!", batch });
+    if (weight > poundsTotal) {
+      poundsTotal = weight;
+    }
+
+    await Batch.findOneAndUpdate({ itemName, batchId }, { outDate, poundsTotal, poundsRemaining: weight });
+    //find the updated batch to send back as a response
+    batch = await Batch.findOne({ itemName, batchId });
+    res.status(200).json({ message: "Successfully edited batch!", batch });
   } catch (e) {
-      return res.status(400).send("body" + e.message);
+      return res.status(400).send("Error in editing batch");
   }
 })
 
