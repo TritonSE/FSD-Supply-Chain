@@ -131,7 +131,7 @@ router.put("/editItem", token_required, async (req, res, next) => {
     // req.user is the user id fetched from Middleware
     const user = await User.findById(req.user.id);
   } catch (e) {
-    console.log(e);
+    console.error(e);
     return res.send({ message: "Error in Fetching user" }, 401);
   }
 
