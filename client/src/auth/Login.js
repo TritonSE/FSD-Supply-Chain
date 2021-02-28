@@ -65,11 +65,6 @@ const Login = (props) => {
             required
           />
         </Form.Group>
-        <p className="white_text redirect sub_link">
-          <a href="/forgot" className="white_text">
-            Forgot Password
-          </a>
-        </p>
 
         {error.length ? <p className="warning">{error}</p> : ""}
         <Button
@@ -83,6 +78,9 @@ const Login = (props) => {
         <p className="white_text redirect">
           <a href="/signup" className="white_text">
             Create an account
+          </a>
+          <a href="/forgot" className="white_text sub_link">
+            Forgot Password{" "}
           </a>
         </p>
       </Form>
