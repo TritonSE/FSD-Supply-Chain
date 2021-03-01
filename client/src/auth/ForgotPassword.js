@@ -45,7 +45,7 @@ const ResetPassword = (props) => {
         </Form.Group>
 
         {message.length ? <p className="white_text">{message}</p> : ""}
-        {response !== 200 ? (
+        {response !== 200 && (
           <Button
             type="submit"
             onClick={submitForm}
@@ -53,8 +53,6 @@ const ResetPassword = (props) => {
           >
             Send Link
           </Button>
-        ) : (
-          ""
         )}
 
         <Link to="/login" className="white_text redirect sub_button">
