@@ -178,9 +178,9 @@ router.post(
         to: user.email,
         subject: "Reset Password",
         text:
-          "This email is being sent to you because you have forgotten your password. \n\n Click the link below to reset your password. \n " +
+          "This email is being sent to you because you have forgotten your password.\n\nClick the link below to reset your password.\n" +
           link +
-          "\n \nIf the link is not working, copy and paste it into the address bar.",
+          "\n\nIf the link is not working, copy and paste it into the address bar.",
       };
       transporter.sendMail(options, function (err, info) {
         if (err) {
