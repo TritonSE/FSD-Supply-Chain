@@ -10,6 +10,9 @@ const UserSchema = Schema({
     type: String,
     required: true,
   },
+  forgotPasswordToken: {
+    type: String,
+  },
 });
 
 const User = model("User", UserSchema);

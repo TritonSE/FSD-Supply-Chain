@@ -1,4 +1,4 @@
-const BACKEND_URL = 'http://localhost:9000';
+const BACKEND_URL = "http://localhost:9000";
 
 /**
  * Add a batch of an item.
@@ -8,17 +8,23 @@ const BACKEND_URL = 'http://localhost:9000';
  * @param {string} outDate The date that this batch should be sent by.
  * @returns A Promise resolving to whether the batch of the item was successfully added.
  */
-export const postNewItem = async (token, itemName, batchId, weight, outDate) => {
+export const postNewItem = async (
+  token,
+  itemName,
+  batchId,
+  weight,
+  outDate
+) => {
   try {
-    const response = await fetch(BACKEND_URL + '/items/addItem', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json', token: token},
+    const response = await fetch(BACKEND_URL + "/items/addItem", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", token: token },
       body: JSON.stringify({
         itemName: itemName,
         batchId: batchId,
         weight: weight,
         outDate: outDate,
-      })
+      }),
     });
 
     if (response.status === 202) {
@@ -30,7 +36,7 @@ export const postNewItem = async (token, itemName, batchId, weight, outDate) => 
     console.error(e);
     return false;
   }
-}
+};
 
 /**
  * Get all items and item batches.
@@ -38,9 +44,9 @@ export const postNewItem = async (token, itemName, batchId, weight, outDate) => 
  */
 export const getAllItems = async (token) => {
   try {
-    const response = await fetch(BACKEND_URL + '/items/getAllItems', {
-      method: 'GET',
-      headers: {token: token}
+    const response = await fetch(BACKEND_URL + "/items/getAllItems", {
+      method: "GET",
+      headers: { token: token },
     });
 
     if (response.status === 200) {
@@ -49,10 +55,10 @@ export const getAllItems = async (token) => {
       return null;
     }
   } catch (e) {
-      console.error(e);
-      return null;
+    console.error(e);
+    return null;
   }
-}
+};
 
 export const auth = (route, email, password) => {
   return fetch(BACKEND_URL + "/" + route, {
@@ -68,4 +74,20 @@ export const signUp = (email, password) => {
 
 export const login = (email, password) => {
   return auth("login", email, password);
+};
+
+export const resetPassword = (token, password) => {
+  return fetch(BACKEND_URL + "/reset", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ token, password }),
+  });
+};
+
+export const forgotPassword = (email) => {
+  return fetch(BACKEND_URL + "/forgot", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email }),
+  });
 };
