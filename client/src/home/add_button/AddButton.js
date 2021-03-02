@@ -199,7 +199,7 @@ function AddItemForm(props) {
           variant="primary"
           
             onClick={() => {
-              if(itemName.length > 0 && batchId.length > 0 && weight > 0 && weight < Infinity){
+              if(itemName.length > 0 && batchId.length === 4 && weight > 0 && weight < Infinity){
                 postNewItem(cookies.token, itemName, batchId, weight, outByDate);
                 props.closeForm();
               }
