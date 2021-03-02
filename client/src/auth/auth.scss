@@ -44,7 +44,21 @@
       font-size: 12px;
       color: white !important;
       text-align: center;
+      &.underline {
+        text-decoration: underline;
+      }
     }
+
+    .sub_link {
+      display: block;
+      margin-top: 5px;
+    }
+
+    .sub_button {
+      margin-top: 40px;
+      margin-bottom: 10px;
+    }
+
     .warning {
       color: #dd4040;
     }
