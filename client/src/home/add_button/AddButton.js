@@ -29,13 +29,15 @@ function AddButton(props) {
 function AddItemForm(props) {
   // Input fields
   const [itemName, setItemName] = useState("");
-  const [itemId, setItemId] = useState("");
+  const [batchId, setBatchId] = useState("");
   const [lbPerHouse, setLbPerHouse] = useState(0);
   const [weight, setWeight] = useState(0);
   const [outByDate, setOutByDate] = useState(new Date());
 
   const [cookies] = useCookies(["token"]);
   const [showWeightWarning, setWeightWarning] = useState(false);
+  const [showitemNameWarning, setitemNameWarning] = useState(false);
+  const [showbatchIdWarning, setbatchIdWarning] = useState(false);
   // Logic for adding recommendations will need to be added
   const [rec, setRec] = useState([]);
   const [itemList, setItemList] = useState([]);
@@ -52,8 +54,23 @@ function AddItemForm(props) {
             <Form.Label>Item Name</Form.Label>
             <ReactSearchAutocomplete
               items={props.itemList}
-              onSearch={string => setItemName(string)}
-              onSelect={item => setItemName(item.name)}
+              
+              onSearch={string => {
+                if(string.length === 0){
+                  setitemNameWarning(true);
+                }
+                else{ 
+                  setitemNameWarning(false);
+                }
+                setItemName(string);
+                
+                
+              }}
+              onSelect={item => {
+                setItemName(item.name);
+                setitemNameWarning(false);
+              }}
+              
               placeholder="e.g. Apples"
               autoFocus
               styling={{
@@ -63,20 +80,51 @@ function AddItemForm(props) {
                 hoverBackgroundColor: "#80bdff",
                 height: '40px',
               }}
+              
             />
-          </Form.Group>
+            
+            {showitemNameWarning && (
+              <Form.Text className="warning">Item name is required</Form.Text>
+            )}
+            
+            
           
-          <b>OR</b>
+            
+            
+            
+          </Form.Group>
 
           <Form.Group>
-            <Form.Label>Item Number</Form.Label>
+            <Form.Label>Batch ID</Form.Label>
             <Form.Control
               type="text"
               placeholder="e.g. 1234"
+              onBlur={(e) => {
+                if(batchId.length === 4){
+                  
+                  setbatchIdWarning(false);
+                }
+                else{
+                  setbatchIdWarning(true);
+                }
+              }}
               onChange={(event) => {
-                setItemId(event.target.value.trim().toLowerCase());
+                let val = event.target.value.trim().toLowerCase();
+                if(val.length === 4){
+                  
+                  setbatchIdWarning(false);
+                }
+                else{
+                  setbatchIdWarning(true);
+                }
+                setBatchId(event.target.value.trim().toLowerCase());
+                
+                
               }}
             />
+            {showbatchIdWarning && (
+              <Form.Text className="warning">4 digit Batch ID is required</Form.Text>
+            )}
           </Form.Group>
 
           <Form.Group>
@@ -84,6 +132,15 @@ function AddItemForm(props) {
             <Form.Control
               type="number"
               placeholder="e.g. 50"
+              onBlur={(e) => {
+                if(weight > 0 && weight < Infinity){
+                  
+                  setWeightWarning(false);
+                }
+                else{
+                  setWeightWarning(true);
+                }
+              }}
               onChange={(event) => {
                 let val = Number(event.target.value.trim());
 
@@ -140,10 +197,27 @@ function AddItemForm(props) {
         </Button>
         <Button
           variant="primary"
-          onClick={() => {
-            postNewItem(cookies.token, itemName, itemId, weight, outByDate);
-            props.closeForm();
-          }}
+          
+            onClick={() => {
+              if(itemName.length > 0 && batchId.length === 4 && weight > 0 && weight < Infinity){
+                postNewItem(cookies.token, itemName, batchId, weight, outByDate);
+                props.closeForm();
+              }
+              else{
+                if(itemName.length === 0){
+                  setitemNameWarning(true);
+                }
+                if(batchId.length !== 4){
+                  setbatchIdWarning(true);
+                } 
+                if(weight <=0 || weight > Infinity){
+                  setWeightWarning(true);
+                }
+              }
+            }}  
+            
+
+     
         >
           Submit
         </Button>
