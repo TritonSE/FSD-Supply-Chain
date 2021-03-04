@@ -125,4 +125,37 @@ router.post("/addItem", token_required, async (req, res, next) => {
   });
 });
 
+router.put("/editItem", token_required, async (req, res, next) => {
+  // authentication
+  try {
+    // req.user is the user id fetched from Middleware
+    const user = await User.findById(req.user.id);
+  } catch (e) {
+    console.error(e);
+    return res.send({ message: "Error in Fetching user" }, 401);
+  }
+
+  try {
+    const { itemName, batchId, weight } = req.body;
+    const outDate = toUTCMidnight(new Date(req.body.outDate));
+    let batch = await Batch.findOne({ itemName, batchId });
+    let poundsTotal = batch.poundsTotal;
+
+    if (outDate < batch.inDate) {
+      return res.status(400).json({ fieldName: "outDate", message: "Outdate is in the past" });
+    }
+    
+    if (weight > poundsTotal) {
+      poundsTotal = weight;
+    }
+
+    await Batch.findOneAndUpdate({ itemName, batchId }, { outDate, poundsTotal, poundsRemaining: weight });
+    //find the updated batch to send back as a response
+    batch = await Batch.findOne({ itemName, batchId });
+    res.status(200).json({ message: "Successfully edited batch!", batch });
+  } catch (e) {
+      return res.status(400).send("Error in editing batch");
+  }
+})
+
 module.exports = router;

@@ -22,9 +22,11 @@ app.use(express.static(path.join(__dirname, "public")));
 
 require("dotenv").config();
 
+const PORT = process.env.PORT || 9000;
+
 mongoose
-  .connect(process.env.DB, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log(`Database connected successfully`))
+  .connect(process.env.DB, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true, useFindAndModify: false })
+  .then(() => console.log(`Server running on port ${PORT}`))
   .catch((err) => console.log(err));
 
 app.use("/", indexRouter);
