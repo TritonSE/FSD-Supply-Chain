@@ -136,11 +136,19 @@ router.put("/editItem", token_required, async (req, res, next) => {
   }
 
   try {
-    const { itemName, batchId, weight } = req.body;
+    const { itemName, oldBatchId, newBatchId, weight } = req.body;
     const outDate = toUTCMidnight(new Date(req.body.outDate));
-    let batch = await Batch.findOne({ itemName, batchId });
-    let poundsTotal = batch.poundsTotal;
+    let batch = await Batch.findOne({ itemName, batchId: oldBatchId });
 
+    // check if batch exists
+    if (batch === null) {
+      return res.status(400).json({
+        fieldName: "batchId",
+        message: "Batch doesn't exist",
+      });
+    } 
+
+    let poundsTotal = batch.poundsTotal;
     if (outDate < batch.inDate) {
       return res.status(400).json({ fieldName: "outDate", message: "Outdate is in the past" });
     }
@@ -149,9 +157,9 @@ router.put("/editItem", token_required, async (req, res, next) => {
       poundsTotal = weight;
     }
 
-    await Batch.findOneAndUpdate({ itemName, batchId }, { outDate, poundsTotal, poundsRemaining: weight });
+    await Batch.findOneAndUpdate({ itemName, batchId: oldBatchId }, { batchId: newBatchId, outDate, poundsTotal, poundsRemaining: weight });
     //find the updated batch to send back as a response
-    batch = await Batch.findOne({ itemName, batchId });
+    batch = await Batch.findOne({ itemName, batchId: newBatchId });
     res.status(200).json({ message: "Successfully edited batch!", batch });
   } catch (e) {
       return res.status(400).send("Error in editing batch");

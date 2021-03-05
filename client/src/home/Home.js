@@ -4,6 +4,7 @@ import { useCookies } from "react-cookie";
 import { navigate } from "@reach/router";
 
 import AddButton from "./add_button/AddButton";
+import EditTempButton from "./edit_form/EditForm";
 import Sidebar from "./sidebar/Sidebar";
 
 const Home = () => {
@@ -75,6 +76,7 @@ const Home = () => {
   return (
     <div>
       <AddButton itemList={itemList}/>
+      <EditTempButton />
       <Sidebar itemsAlpha={itemsAlpha} itemsExpiry={itemsExpiry}/>
       <button onClick={logout}>Logout</button>
     </div>

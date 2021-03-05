@@ -128,7 +128,7 @@ function AddItemForm(props) {
           </Form.Group>
 
           <Form.Group>
-            <Form.Label>Weight(lbs)</Form.Label>
+            <Form.Label>Weight (lbs)</Form.Label>
             <Form.Control
               type="number"
               placeholder="e.g. 50"
