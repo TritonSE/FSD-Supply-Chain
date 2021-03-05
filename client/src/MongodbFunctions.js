@@ -75,8 +75,6 @@ export const editItem = async (token, itemName, oldBatchId, newBatchId, weight, 
     });
     if (response.status === 200) {
       return response.json();
-    } else {
-      return null;
     }
   } catch (e) {
     console.error(e);

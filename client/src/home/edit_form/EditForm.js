@@ -33,7 +33,7 @@ function EditTempButton() {
     const [lbPerHouse, setLbPerHouse] = useState(0);
     const [weight, setWeight] = useState(0);
     const [outByDate, setOutByDate] = useState(new Date());
-  
+    
     const [cookies] = useCookies(["token"]);
     const [showWeightWarning, setWeightWarning] = useState(false);
     const [showitemNameWarning, setitemNameWarning] = useState(false);
@@ -160,9 +160,9 @@ function EditTempButton() {
               />
             </Form.Group>
   
-
+            
           </Form.Group>
-  
+          
           <Button variant="light" onClick={() => props.closeForm()}>
             Cancel
           </Button>
@@ -170,9 +170,9 @@ function EditTempButton() {
             variant="primary"
             
               onClick={() => {
-                if(true/*itemName.length > 0 && newBatchId.length === 4 && weight > 0 && weight < Infinity*/){
-                  editItem(cookies.token, itemName, oldBatchId, newBatchId, weight, outByDate);
-                  props.closeForm();
+                if(itemName.length > 0 && newBatchId.length === 4 && weight > 0 && weight < Infinity){
+                    editItem(cookies.token, itemName, oldBatchId, newBatchId, weight, outByDate);
+                    props.closeForm();
                 }
                 else{
                   if(itemName.length === 0){
