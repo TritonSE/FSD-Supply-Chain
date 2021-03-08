@@ -60,6 +60,28 @@ export const getAllItems = async (token) => {
   }
 };
 
+export const editItem = async (token, itemName, oldBatchId, newBatchId, weight, outDate) => {
+  try {
+    const response = await fetch(BACKEND_URL + "/items/editItem", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json", token },
+      body: JSON.stringify({
+        itemName: itemName,
+        oldBatchId: oldBatchId,
+        newBatchId: newBatchId,
+        weight: weight,
+        outDate: outDate,
+      }),
+    });
+    if (response.status === 200) {
+      return response.json();
+    }
+  } catch (e) {
+    console.error(e);
+    return null;
+  }
+};
+
 export const auth = (route, email, password) => {
   return fetch(BACKEND_URL + "/" + route, {
     method: "POST",
