@@ -46,7 +46,7 @@ function EditTempButton(props) {
       setNewBatchId(props.batch.batchId);
       setWeight(props.batch.poundsRemaining);
       setOutByDate(props.batch.outDate);
-    })
+    }, [])
   
     return (
       <div className="edit_form_container">
