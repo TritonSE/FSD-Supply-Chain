@@ -10,6 +10,7 @@ import Sidebar from "./sidebar/Sidebar";
 const Home = () => {
   const [cookies, removeCookie] = useCookies(["token"]);
   const [itemList, setItemList] = useState([]);
+  const [tempBatch, setTempBatch] = useState();
   const [itemsAlpha, setItemsAlpha] = useState([]);
   const [itemsExpiry, setItemsExpiry] = useState([]);
 
@@ -69,6 +70,10 @@ const Home = () => {
         setItemList(itemNames);
         setItemsAlpha(items_raw.sort(sortAlpha));
         setItemsExpiry(batches_raw.sort(sortExpiry))
+
+        //temporary placeholder batch
+        let temp = batches_raw.find(batch => batch.batchId === "9998");
+        setTempBatch({...temp, outDate: new Date("2021-03-10T00:00:00.000Z")});
       }
     })
   }, []);
@@ -76,7 +81,7 @@ const Home = () => {
   return (
     <div>
       <AddButton itemList={itemList}/>
-      <EditTempButton />
+      <EditTempButton batch={tempBatch}/>
       <Sidebar itemsAlpha={itemsAlpha} itemsExpiry={itemsExpiry}/>
       <button onClick={logout}>Logout</button>
     </div>

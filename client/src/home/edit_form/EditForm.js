@@ -10,7 +10,7 @@ import { ReactSearchAutocomplete } from 'react-search-autocomplete';
 import "react-datepicker/dist/react-datepicker.css";
 import "./EditForm.scss";
 
-function EditTempButton() {
+function EditTempButton(props) {
     const [formRendered, toggleFormRendered] = useState(false);
   
     return (
@@ -19,7 +19,7 @@ function EditTempButton() {
           Edit Item
         </Button>
         {formRendered && (
-          <EditForm closeForm={() => toggleFormRendered(false)}></EditForm>
+          <EditForm batch={props.batch} closeForm={() => toggleFormRendered(false)}></EditForm>
         )}
       </div>
     );
@@ -30,7 +30,6 @@ function EditTempButton() {
     const [itemName, setItemName] = useState("");
     const [oldBatchId, setOldBatchId] = useState("");
     const [newBatchId, setNewBatchId] = useState("");
-    const [lbPerHouse, setLbPerHouse] = useState(0);
     const [weight, setWeight] = useState(0);
     const [outByDate, setOutByDate] = useState(new Date());
     
@@ -40,11 +39,14 @@ function EditTempButton() {
     const [showbatchIdWarning, setbatchIdWarning] = useState(false);
     // Logic for adding recommendations will need to be added
     const [rec, setRec] = useState([]);
-    const [itemList, setItemList] = useState([]);
   
     useEffect(() => {
-      setItemList(props.itemList);
-    }, [props.itemList])
+      setItemName(props.batch.itemName.toLowerCase());
+      setOldBatchId(props.batch.batchId);
+      setNewBatchId(props.batch.batchId);
+      setWeight(props.batch.poundsRemaining);
+      setOutByDate(props.batch.outDate);
+    })
   
     return (
       <div className="edit_form_container">
@@ -53,7 +55,7 @@ function EditTempButton() {
             <Form.Group>
               <Form.Label> Item Name</Form.Label>
               <Form.Control
-                
+                defaultValue={itemName}
                 
                 onChange={event => {
                   let string = event.target.value.trim().toLowerCase();
@@ -73,8 +75,7 @@ function EditTempButton() {
                       setitemNameWarning(false);
                     }
                   }}
-                
-                placeholder="e.g. Apples"
+
                 autoFocus
                 styling={{
                   border: "1px solid #cbcdd1",
@@ -94,10 +95,10 @@ function EditTempButton() {
               <Form.Label> Batch ID</Form.Label>
               <Form.Control
                 type="text"
-                placeholder="e.g. 1234"
+                defaultValue={oldBatchId}
                 
                 onBlur={(e) => {
-                  if(newBatchId.length === 4){
+                  if(oldBatchId.length === 4 || newBatchId.length === 4){
                     setbatchIdWarning(false);
                   }
                   else{
@@ -105,14 +106,13 @@ function EditTempButton() {
                   }
                 }}
                 onChange={(event) => {
-                  let val = event.target.value.trim().toLowerCase();
+                  let val = event.target.value.trim();
                   if(val.length === 4){
                     setbatchIdWarning(false);
                   }
                   else{
                     setbatchIdWarning(true);
                   }
-                  setOldBatchId(val);
                   setNewBatchId(val);
                 }}
               />
@@ -125,10 +125,10 @@ function EditTempButton() {
               <Form.Label>Weight (lbs)</Form.Label>
               <Form.Control
                 type="number"
-                placeholder="e.g. 50"
+                placeholder={weight}
+
                 onBlur={(e) => {
                   if(weight > 0 && weight < Infinity){
-                    
                     setWeightWarning(false);
                   }
                   else{
@@ -137,7 +137,6 @@ function EditTempButton() {
                 }}
                 onChange={(event) => {
                   let val = Number(event.target.value.trim());
-  
                   // Checks for valid integer
                   if (val !== Infinity && val > 0) {
                     setWeight(val);
@@ -171,6 +170,7 @@ function EditTempButton() {
             
               onClick={() => {
                 if(itemName.length > 0 && newBatchId.length === 4 && weight > 0 && weight < Infinity){
+                    console.log(weight);
                     editItem(cookies.token, itemName, oldBatchId, newBatchId, weight, outByDate);
                     props.closeForm();
                 }
